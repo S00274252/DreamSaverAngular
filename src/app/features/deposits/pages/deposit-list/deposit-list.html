@@ -1,0 +1,37 @@
+<section class="page">
+  <div class="page-header">
+    <h2>Deposits</h2>
+    <a matButton="filled" routerLink="/deposits/new">Add deposit</a>
+  </div>
+
+  @if (actionError(); as message) {
+    <p role="alert" class="error">{{ message }}</p>
+  }
+
+  @let s = state();
+  @if (s.status === 'loading') {
+    <p>Loading deposits...</p>
+  } @else if (s.status === 'error') {
+    <p role="alert" class="error">{{ s.message }}</p>
+  } @else if (s.data.length === 0) {
+    <p>No deposits yet. Add your first monthly deposit.</p>
+  } @else {
+    <div class="card-grid">
+      @for (deposit of s.data; track deposit._id) {
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>{{ deposit.amount | currency: 'EUR' }}</mat-card-title>
+            <mat-card-subtitle>{{ deposit.date | date: 'mediumDate' : 'UTC' }}</mat-card-subtitle>
+          </mat-card-header>
+          @if (deposit.note) {
+            <mat-card-content>{{ deposit.note }}</mat-card-content>
+          }
+          <mat-card-actions>
+            <a matButton [routerLink]="['/deposits', deposit._id, 'edit']">Edit</a>
+            <button matButton type="button" (click)="deleteDeposit(deposit)">Delete</button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+</section>
