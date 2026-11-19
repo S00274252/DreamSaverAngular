@@ -2,6 +2,8 @@ import { Routes } from '@angular/router';
 import { currentUserGuard } from './core/current-user.guard';
 
 export const routes: Routes = [
+  { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+  
   {
     path: '',
     canActivate: [currentUserGuard],
@@ -53,4 +55,6 @@ export const routes: Routes = [
       },
     ],
   },
+
+  { path: '**', redirectTo: 'dashboard' },
 ];

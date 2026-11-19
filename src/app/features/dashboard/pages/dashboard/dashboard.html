@@ -1,0 +1,79 @@
+<section class="page">
+  <h2>Hello, {{ currentUser.user()?.name }}</h2>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Your balance</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      @let b = balanceState();
+      @if (b.status === 'loading') {
+        <p>Loading balance...</p>
+      } @else if (b.status === 'error') {
+        <p role="alert" class="error">{{ b.message }}</p>
+      } @else {
+        <p class="big-number">{{ b.data.totalBalance | currency: 'EUR' }}</p>
+        <dl class="breakdown">
+          <dt>Deposits</dt>
+          <dd>{{ b.data.depositsTotal | currency: 'EUR' }}</dd>
+          <dt>Static funds</dt>
+          <dd>{{ b.data.staticFundsTotal | currency: 'EUR' }}</dd>
+          <dt>Interest-bearing funds (money put in)</dt>
+          <dd>{{ b.data.interestFundsPrincipal | currency: 'EUR' }}</dd>
+          <dt>Interest earned so far</dt>
+          <dd>{{ b.data.interestEarned | currency: 'EUR' }}</dd>
+        </dl>
+      }
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card appearance="outlined">
+    <mat-card-header>
+      <mat-card-title>Predict your balance</mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="predictionForm" (ngSubmit)="onPredict()" class="prediction-form" novalidate>
+        <mat-form-field appearance="outline">
+          <mat-label>Date</mat-label>
+          <input matInput [matDatepicker]="picker" [min]="tomorrow" formControlName="date" />
+          <mat-datepicker-toggle matIconSuffix [for]="picker" />
+          <mat-datepicker #picker />
+          @if (predictionForm.controls.date.hasError('required')) {
+            <mat-error>Choose a date</mat-error>
+          } @else if (predictionForm.controls.date.hasError('pastDate') || predictionForm.controls.date.hasError('matDatepickerMin')) {
+            <mat-error>The date must be in the future</mat-error>
+          } @else if (predictionForm.controls.date.hasError('matDatepickerParse')) {
+            <mat-error>Enter a valid date</mat-error>
+          }
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Monthly deposit (EUR)</mat-label>
+          <input matInput type="number" step="0.01" formControlName="monthlyDeposit" inputmode="decimal" />
+          <mat-hint>Optional, leave empty to use your average</mat-hint>
+          @if (predictionForm.controls.monthlyDeposit.hasError('min')) {
+            <mat-error>Cannot be negative</mat-error>
+          }
+        </mat-form-field>
+
+        <button matButton="filled" type="submit">Predict</button>
+      </form>
+
+      @let p = prediction();
+      @if (p) {
+        @if (p.status === 'loading') {
+          <p>Calculating...</p>
+        } @else if (p.status === 'error') {
+          <p role="alert" class="error">{{ p.message }}</p>
+        } @else {
+          <p>
+            On {{ p.data.predictionDate | date: 'longDate' : 'UTC' }} you could have
+            <strong>{{ p.data.predictedBalance | currency: 'EUR' }}</strong>
+            (growth of {{ p.data.expectedGrowth | currency: 'EUR' }}), saving
+            {{ p.data.monthlyDeposit | currency: 'EUR' }} a month.
+          </p>
+        }
+      }
+    </mat-card-content>
+  </mat-card>
+</section>
