@@ -1,0 +1,44 @@
+<mat-card appearance="outlined">
+  <mat-card-header>
+    <mat-card-title>{{ dream().title }}</mat-card-title>
+    <mat-card-subtitle>Target: {{ dream().targetAmount | currency: 'EUR' }}</mat-card-subtitle>
+  </mat-card-header>
+
+  <mat-card-content>
+    @if (dream().achieved) {
+      <p class="badge">Achieved</p>
+    } @else {
+      @let e = estimate();
+      @if (e.status === 'loading') {
+        <p>Working out your countdown...</p>
+      } @else if (e.status === 'error') {
+        <p role="alert" class="error">{{ e.message }}</p>
+      } @else {
+        <mat-progress-bar
+          mode="determinate"
+          [value]="progress(e.data)"
+          [attr.aria-label]="'Progress towards ' + dream().title"
+        />
+        <p>{{ e.data.currentBalance | currency: 'EUR' }} saved of {{ e.data.targetAmount | currency: 'EUR' }}</p>
+
+        @if (!e.data.achievable) {
+          <p>Not reachable yet. Add deposits or funds and the countdown will appear.</p>
+        } @else if (e.data.monthsRemaining === 0) {
+          <p class="badge">You can already afford this!</p>
+        } @else {
+          <p>
+            <strong>{{ e.data.monthsRemaining }} months</strong>
+            ({{ e.data.daysRemaining }} days) to go
+          </p>
+          <p>Estimated date: {{ e.data.estimatedDate | date: 'longDate' }}</p>
+          <p>Based on saving {{ e.data.monthlyDeposit | currency: 'EUR' }} a month.</p>
+        }
+      }
+    }
+  </mat-card-content>
+
+  <mat-card-actions>
+    <a matButton [routerLink]="['/dreams', dream()._id, 'edit']">Edit</a>
+    <button matButton type="button" (click)="deleted.emit(dream())">Delete</button>
+  </mat-card-actions>
+</mat-card>
