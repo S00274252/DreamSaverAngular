@@ -5,6 +5,22 @@ export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   
   {
+    path: 'users',
+    title: 'Users',
+    loadComponent: () => import('./features/users/pages/user-list/user-list').then((m) => m.UserList),
+  },
+  {
+    path: 'users/new',
+    title: 'New user',
+    loadComponent: () => import('./features/users/pages/user-form/user-form').then((m) => m.UserForm),
+  },
+  {
+    path: 'users/:id/edit',
+    title: 'Edit user',
+    loadComponent: () => import('./features/users/pages/user-form/user-form').then((m) => m.UserForm),
+  },
+
+  {
     path: '',
     canActivate: [currentUserGuard],
     children: [
