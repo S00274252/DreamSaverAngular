@@ -1,0 +1,25 @@
+<section class="page">
+  <div class="page-header">
+    <h2>Dreams</h2>
+    <a matButton="filled" routerLink="/dreams/new">Add dream</a>
+  </div>
+
+  @if (actionError(); as message) {
+    <p role="alert" class="error">{{ message }}</p>
+  }
+
+  @let s = state();
+  @if (s.status === 'loading') {
+    <p>Loading dreams...</p>
+  } @else if (s.status === 'error') {
+    <p role="alert" class="error">{{ s.message }}</p>
+  } @else if (s.data.length === 0) {
+    <p>No dreams yet. Add something you want to save for and see when it will come true.</p>
+  } @else {
+    <div class="card-grid">
+      @for (dream of s.data; track dream._id) {
+        <app-dream-card [dream]="dream" (deleted)="deleteDream($event)" />
+      }
+    </div>
+  }
+</section>

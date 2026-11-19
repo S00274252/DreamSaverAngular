@@ -1,0 +1,44 @@
+<form [formGroup]="dreamForm" (ngSubmit)="onSubmit()" class="form-page" novalidate>
+  @if (saving()) {
+    <mat-progress-bar mode="indeterminate" />
+  }
+
+  <h2>{{ id() ? 'Edit dream' : 'Add dream' }}</h2>
+
+  <mat-form-field appearance="outline">
+    <mat-label>What are you saving for?</mat-label>
+    <input matInput formControlName="title" placeholder="e.g. New car" />
+    @if (dreamForm.controls.title.hasError('required')) {
+      <mat-error>Title is required</mat-error>
+    } @else if (dreamForm.controls.title.hasError('blank')) {
+      <mat-error>Title cannot be only spaces</mat-error>
+    } @else if (dreamForm.controls.title.hasError('maxlength')) {
+      <mat-error>Title must be 60 characters or fewer</mat-error>
+    }
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Target amount (EUR)</mat-label>
+    <input matInput type="number" step="0.01" formControlName="targetAmount" inputmode="decimal" />
+    @if (dreamForm.controls.targetAmount.hasError('required')) {
+      <mat-error>Target amount is required</mat-error>
+    } @else if (dreamForm.controls.targetAmount.hasError('min')) {
+      <mat-error>Target amount must be at least 1</mat-error>
+    }
+  </mat-form-field>
+
+  @if (id()) {
+    <mat-checkbox formControlName="achieved">I have achieved this dream</mat-checkbox>
+  }
+
+  @if (saveError(); as message) {
+    <p role="alert" class="error">{{ message }}</p>
+  }
+
+  <div class="button-group">
+    <button matButton="filled" type="submit" [disabled]="saving()">
+      {{ saving() ? 'Saving...' : 'Save dream' }}
+    </button>
+    <a matButton routerLink="/dreams">Cancel</a>
+  </div>
+</form>

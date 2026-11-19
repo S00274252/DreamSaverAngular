@@ -36,6 +36,21 @@ export const routes: Routes = [
         title: 'Edit fund',
         loadComponent: () => import('./features/funds/pages/fund-form/fund-form').then((m) => m.FundForm),
       },
+      {
+        path: 'dreams',
+        title: 'Dreams',
+        loadComponent: () => import('./features/dreams/pages/dream-list/dream-list').then((m) => m.DreamList),
+      },
+      {
+        path: 'dreams/new',
+        title: 'Add dream',
+        loadComponent: () => import('./features/dreams/pages/dream-form/dream-form').then((m) => m.DreamForm),
+      },
+      {
+        path: 'dreams/:id/edit',
+        title: 'Edit dream',
+        loadComponent: () => import('./features/dreams/pages/dream-form/dream-form').then((m) => m.DreamForm),
+      },
     ],
   },
 ];
