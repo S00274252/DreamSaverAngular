@@ -1,0 +1,45 @@
+<section class="page">
+  <div class="page-header">
+    <h2>Funds</h2>
+    <a matButton="filled" routerLink="/funds/new">Add fund</a>
+  </div>
+
+  @if (actionError(); as message) {
+    <p role="alert" class="error">{{ message }}</p>
+  }
+
+  @let s = state();
+  @if (s.status === 'loading') {
+    <p>Loading funds...</p>
+  } @else if (s.status === 'error') {
+    <p role="alert" class="error">{{ s.message }}</p>
+  } @else if (s.data.length === 0) {
+    <p>No funds yet. Add money you have already set aside.</p>
+  } @else {
+    <div class="card-grid">
+      @for (fund of s.data; track fund._id) {
+        <mat-card appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>{{ fund.name }}</mat-card-title>
+            <mat-card-subtitle>
+              {{ fund.type === 'interest' ? 'Interest-bearing fund' : 'Static fund (no interest)' }}
+            </mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <p>{{ fund.amount | currency: 'EUR' }}</p>
+            @if (fund.type === 'interest') {
+              <p>
+                {{ fund.interestRate }}% a year for {{ fund.durationMonths }} months, from
+                {{ fund.startDate | date: 'mediumDate' : 'UTC' }}
+              </p>
+            }
+          </mat-card-content>
+          <mat-card-actions>
+            <a matButton [routerLink]="['/funds', fund._id, 'edit']">Edit</a>
+            <button matButton type="button" (click)="deleteFund(fund)">Delete</button>
+          </mat-card-actions>
+        </mat-card>
+      }
+    </div>
+  }
+</section>
