@@ -10,14 +10,14 @@ export class FinanceService {
   private apiUrl = `${API_URL}/users`;
 
   getBalance(userId: string): Observable<Balance> {
-    return this.http.get<Balance>(`${this.apiUrl}/${userId}/balance`);
-  }
+  return this.http.get<Balance>(`${API_URL}/balance`, { params: new HttpParams().set('userId', userId) });
+}
 
   getPrediction(userId: string, date: string, monthlyDeposit?: number): Observable<Prediction> {
-    let params = new HttpParams().set('date', date);
+    let params = new HttpParams().set('userId', userId).set('date', date);
     if (monthlyDeposit !== undefined) {
       params = params.set('monthlyDeposit', monthlyDeposit);
     }
-    return this.http.get<Prediction>(`${this.apiUrl}/${userId}/prediction`, { params });
+    return this.http.get<Prediction>(`${API_URL}/predictions`, { params });
   }
 }
