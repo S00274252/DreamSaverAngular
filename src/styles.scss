@@ -1,39 +1,434 @@
-// Include theming for Angular Material with `mat.theme()`.
-// This Sass mixin will define CSS variables that are used for styling Angular Material
-// components according to the Material 3 design spec.
-// Learn more about theming and how to use it for your application's
-// custom components at https://material.angular.dev/guide/theming
 @use '@angular/material' as mat;
+
+:root {
+  --ds-paper: #f1f3f9;
+  --ds-surface: #ffffff;
+  --ds-ink: #141a3a;
+  --ds-muted: #596082;
+  --ds-line: #d9deec;
+  --ds-primary: #27348b;
+  --ds-primary-soft: #e3e7fa;
+  --ds-periwinkle: #7f8ce0;
+  --ds-marigold: #f2a93b;
+  --ds-marigold-soft: #fdf0d8;
+  --ds-error: #b42318;
+  --ds-error-soft: #fdecea;
+
+  --ds-radius: 14px;
+  --ds-radius-small: 8px;
+  --ds-display: 'Bricolage Grotesque', 'Segoe UI', system-ui, sans-serif;
+}
 
 html {
   height: 100%;
   @include mat.theme(
     (
       color: (
-        primary: mat.$magenta-palette,
-        tertiary: mat.$violet-palette,
+        primary: mat.$blue-palette,
+        tertiary: mat.$orange-palette,
       ),
-      typography: Roboto,
+      typography: (
+        plain-family: 'Figtree, "Segoe UI", system-ui, sans-serif',
+        brand-family: 'Bricolage Grotesque, "Segoe UI", system-ui, sans-serif',
+      ),
       density: 0,
     )
   );
+
+  --mat-sys-primary: var(--ds-primary);
+  --mat-sys-on-primary: #ffffff;
+  --mat-sys-primary-container: var(--ds-primary-soft);
+  --mat-sys-on-primary-container: var(--ds-primary);
+  --mat-sys-surface: var(--ds-surface);
+  --mat-sys-background: var(--ds-paper);
+  --mat-sys-on-surface: var(--ds-ink);
+  --mat-sys-on-surface-variant: var(--ds-muted);
+  --mat-sys-outline: #8a91b3;
+  --mat-sys-outline-variant: var(--ds-line);
+  --mat-sys-error: var(--ds-error);
 }
 
 body {
-  // Default the application to a light color theme. This can be changed to
-  // `dark` to enable the dark color theme, or to `light dark` to defer to the
-  // user's system settings.
   color-scheme: light;
-
-  // Set a default background, font and text colors for the application using
-  // Angular Material's system-level CSS variables. Learn more about these
-  // variables at https://material.angular.dev/guide/system-variables
-  background-color: var(--mat-sys-surface);
-  color: var(--mat-sys-on-surface);
-  font: var(--mat-sys-body-medium);
-
-  // Reset the user agent margin.
   margin: 0;
+  min-height: 100%;
+  background-color: var(--ds-paper);
+  color: var(--ds-ink);
+  font: var(--mat-sys-body-large);
+  font-size: 1rem;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+}
+
+.mat-toolbar.app-toolbar {
+  --mat-toolbar-container-background-color: var(--ds-surface);
+  --mat-toolbar-container-text-color: var(--ds-ink);
+  --mat-toolbar-standard-height: 4rem;
+  flex-wrap: wrap;
+  gap: 0.25rem 2rem;
+  height: auto;
+  min-height: 4rem;
+  padding: 0 max(1rem, calc((100% - 64rem) / 2 + 1rem));
+  border-bottom: 1px solid var(--ds-line);
+}
+
+.brand {
+  font-family: var(--ds-display);
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  color: var(--ds-primary);
+  text-decoration: none;
+}
+
+.app-nav {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  margin-left: auto;
+
+  a,
+  button {
+    --mat-button-text-label-text-color: var(--ds-muted);
+    --mat-button-text-state-layer-color: var(--ds-primary);
+    border-radius: var(--ds-radius-small);
+    font-weight: 600;
+  }
+
+ a.active {
+    --mat-button-text-label-text-color: var(--ds-ink);
+    box-shadow: inset 0 -3px 0 var(--ds-marigold);
+    border-radius: var(--ds-radius-small) var(--ds-radius-small) 0 0;
+  }
+}
+
+main {
+  box-sizing: border-box;
+  max-width: 64rem;
+  margin: 0 auto;
+  padding: 2.5rem 1rem 4rem;
+}
+
+h2 {
+  margin: 0 0 1.25rem;
+  font-family: var(--ds-display);
+  font-size: clamp(1.75rem, 4vw, 2.25rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+
+  > h2,
+  > p {
+    margin: 0;
+  }
+}
+
+.page-header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem 1.5rem;
+
+  h2 {
+    margin: 0;
+  }
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 19rem), 1fr));
+  gap: 1rem;
+}
+
+[matButton='filled'] {
+  --mat-button-filled-container-color: var(--ds-primary);
+  --mat-button-filled-label-text-color: #ffffff;
+  --mat-button-filled-container-height: 2.75rem;
+  --mat-button-filled-container-shape: var(--ds-radius-small);
+  font-weight: 700;
+}
+
+.mat-mdc-card {
+  --mat-card-outlined-container-color: var(--ds-surface);
+  --mat-card-outlined-outline-color: var(--ds-line);
+  --mat-card-outlined-container-shape: var(--ds-radius);
+  --mat-card-title-text-font: var(--ds-display);
+  --mat-card-title-text-size: 1.5rem;
+  --mat-card-title-text-weight: 700;
+  --mat-card-title-text-tracking: -0.02em;
+  --mat-card-subtitle-text-color: var(--ds-muted);
+  --mat-card-subtitle-text-size: 0.9375rem;
+}
+
+.mat-mdc-card .mat-mdc-card-header {
+  padding: 1.25rem 1.25rem 0;
+}
+
+.mat-mdc-card .mat-mdc-card-content {
+  padding: 1rem 1.25rem 0.5rem;
+
+  p {
+    margin: 0 0 0.5rem;
+  }
+}
+
+.mat-mdc-card .mat-mdc-card-actions {
+  padding: 0.25rem 0.75rem 0.75rem;
+  margin-top: auto;
+}
+
+.card-grid .mat-mdc-card {
   height: 100%;
 }
-/* You can add global styles to this file, and also import other style files */
+
+.amount {
+  font-family: var(--ds-display);
+  font-size: 1.75rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-primary);
+}
+
+.balance-card .mat-mdc-card-content {
+  padding-top: 0.5rem;
+}
+
+.big-number {
+  margin: 0.25rem 0 1.25rem !important;
+  font-family: var(--ds-display);
+  font-size: clamp(2.75rem, 9vw, 4.75rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.045em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ds-primary);
+}
+
+.split {
+  display: flex;
+  height: 0.875rem;
+  gap: 3px;
+  margin-bottom: 1.25rem;
+  border-radius: 999px;
+  overflow: hidden;
+  background: var(--ds-primary-soft);
+
+  span {
+    min-width: 0;
+    transform-origin: left center;
+    animation: split-grow 700ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
+  }
+
+  .part-deposits,
+  .part-static,
+  .part-principal,
+  .part-interest {
+    display: block;
+  }
+  .part-deposits { background: var(--ds-primary); }
+  .part-static { background: var(--ds-periwinkle); }
+  .part-principal { background: #b9c1f0; }
+  .part-interest { background: var(--ds-marigold); }
+}
+
+@keyframes split-grow {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+.breakdown {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.5rem 1.5rem;
+  margin: 0;
+  max-width: 34rem;
+
+  dt {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    color: var(--ds-muted);
+
+    &::before {
+      content: '';
+      flex: none;
+      width: 0.75rem;
+      height: 0.75rem;
+      border-radius: 4px;
+      background: var(--swatch, var(--ds-primary));
+    }
+  }
+
+  dd {
+    margin: 0;
+    font-weight: 700;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  dt:nth-of-type(1) { --swatch: var(--ds-primary); }
+  dt:nth-of-type(2) { --swatch: var(--ds-periwinkle); }
+  dt:nth-of-type(3) { --swatch: #b9c1f0; }
+  dt:nth-of-type(4) { --swatch: var(--ds-marigold); }
+}
+
+.prediction-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  align-items: start;
+  gap: 0.5rem 1rem;
+
+  button {
+    --mat-button-filled-container-height: 3.5rem;
+  }
+}
+
+.prediction-result {
+  margin: 1rem 0 0.5rem !important;
+  padding: 1rem 1.25rem;
+  border-radius: var(--ds-radius-small);
+  background: var(--ds-primary-soft);
+  font-size: 1.0625rem;
+
+  strong {
+    font-family: var(--ds-display);
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+}
+
+.mat-mdc-progress-bar {
+  --mat-progress-bar-active-indicator-color: var(--ds-marigold);
+  --mat-progress-bar-track-color: var(--ds-marigold-soft);
+  --mat-progress-bar-active-indicator-height: 10px;
+  --mat-progress-bar-track-height: 10px;
+  --mat-progress-bar-track-shape: 999px;
+}
+
+.dream-saved {
+  margin: 0.5rem 0 1rem !important;
+  color: var(--ds-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0 0.5rem;
+  margin: 0 0 0.25rem !important;
+
+  strong {
+    font-family: var(--ds-display);
+    font-size: 2.25rem;
+    font-weight: 800;
+    line-height: 1.1;
+    letter-spacing: -0.04em;
+    color: var(--ds-primary);
+  }
+
+  span {
+    color: var(--ds-muted);
+  }
+}
+
+.badge {
+  display: inline-block;
+  margin: 0 !important;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: var(--ds-marigold-soft);
+  color: #7a4a00;
+  font-size: 0.875rem;
+  font-weight: 700;
+}
+
+
+.form-page {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  box-sizing: border-box;
+  max-width: 34rem;
+  margin: 0 auto;
+  padding: 1.75rem;
+  border: 1px solid var(--ds-line);
+  border-radius: var(--ds-radius);
+  background: var(--ds-surface);
+  overflow: hidden;
+  position: relative;
+
+  > h2 {
+    margin-bottom: 1rem;
+  }
+
+  > .mat-mdc-progress-bar {
+    position: absolute;
+    inset: 0 0 auto 0;
+  }
+}
+
+.mat-mdc-form-field {
+  --mat-form-field-container-text-size: 1rem;
+  --mat-form-field-outlined-label-text-color: var(--ds-muted);
+  --mat-form-field-outlined-outline-color: #b4bbd6;
+  --mat-form-field-outlined-hover-outline-color: var(--ds-ink);
+  --mat-form-field-outlined-focus-outline-color: var(--ds-primary);
+  --mat-form-field-outlined-focus-label-text-color: var(--ds-primary);
+  --mat-form-field-container-shape: var(--ds-radius-small);
+}
+
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  margin-top: 1rem;
+}
+
+.error {
+  margin: 0.5rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid var(--ds-error);
+  border-radius: 0 var(--ds-radius-small) var(--ds-radius-small) 0;
+  background: var(--ds-error-soft);
+  color: var(--ds-error);
+  font-weight: 600;
+}
+
+@media (max-width: 40rem) {
+  main {
+    padding-top: 1.5rem;
+  }
+
+  .app-toolbar {
+    padding-block: 0.5rem;
+  }
+
+  .app-nav {
+    margin-left: 0;
+    width: 100%;
+  }
+
+  .form-page {
+    padding: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .split span {
+    animation: none;
+  }
+}

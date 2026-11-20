@@ -26,7 +26,7 @@
             </mat-card-subtitle>
           </mat-card-header>
           <mat-card-content>
-            <p>{{ fund.amount | currency: 'EUR' }}</p>
+            <p class="amount">{{ fund.amount | currency: 'EUR' }}</p>
             @if (fund.type === 'interest') {
               <p>
                 {{ fund.interestRate }}% a year for {{ fund.durationMonths }} months, from

@@ -1,7 +1,7 @@
 <section class="page">
   <h2>Hello, {{ currentUser.user()?.name }}</h2>
 
-  <mat-card appearance="outlined">
+  <mat-card appearance="outlined" class="balance-card">
     <mat-card-header>
       <mat-card-title>Your balance</mat-card-title>
     </mat-card-header>
@@ -13,6 +13,12 @@
         <p role="alert" class="error">{{ b.message }}</p>
       } @else {
         <p class="big-number">{{ b.data.totalBalance | currency: 'EUR' }}</p>
+        <div class="split" role="img" aria-label="How your balance is split between deposits, funds and interest">
+          <span class="part-deposits" [style.flex-grow]="b.data.depositsTotal"></span>
+          <span class="part-static" [style.flex-grow]="b.data.staticFundsTotal"></span>
+          <span class="part-principal" [style.flex-grow]="b.data.interestFundsPrincipal"></span>
+          <span class="part-interest" [style.flex-grow]="b.data.interestEarned"></span>
+        </div>
         <dl class="breakdown">
           <dt>Deposits</dt>
           <dd>{{ b.data.depositsTotal | currency: 'EUR' }}</dd>
@@ -66,7 +72,7 @@
         } @else if (p.status === 'error') {
           <p role="alert" class="error">{{ p.message }}</p>
         } @else {
-          <p>
+          <p class="prediction-result">
             On {{ p.data.predictionDate | date: 'longDate' : 'UTC' }} you could have
             <strong>{{ p.data.predictedBalance | currency: 'EUR' }}</strong>
             (growth of {{ p.data.expectedGrowth | currency: 'EUR' }}), saving

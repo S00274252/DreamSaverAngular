@@ -19,16 +19,16 @@
           [value]="progress(e.data)"
           [attr.aria-label]="'Progress towards ' + dream().title"
         />
-        <p>{{ e.data.currentBalance | currency: 'EUR' }} saved of {{ e.data.targetAmount | currency: 'EUR' }}</p>
+        <p class="dream-saved">{{ e.data.currentBalance | currency: 'EUR' }} saved of {{ e.data.targetAmount | currency: 'EUR' }}</p>
 
         @if (!e.data.achievable) {
           <p>Not reachable yet. Add deposits or funds and the countdown will appear.</p>
         } @else if (e.data.monthsRemaining === 0) {
           <p class="badge">You can already afford this!</p>
         } @else {
-          <p>
+          <p class="countdown">
             <strong>{{ e.data.monthsRemaining }} months</strong>
-            ({{ e.data.daysRemaining }} days) to go
+            <span>({{ e.data.daysRemaining }} days) to go</span>
           </p>
           <p>Estimated date: {{ e.data.estimatedDate | date: 'longDate' }}</p>
           <p>Based on saving {{ e.data.monthlyDeposit | currency: 'EUR' }} a month.</p>
