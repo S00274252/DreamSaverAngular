@@ -5,18 +5,13 @@ export const routes: Routes = [
   { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
   
   {
-    path: 'users',
-    title: 'Users',
-    loadComponent: () => import('./features/users/pages/user-list/user-list').then((m) => m.UserList),
+    path: 'login',
+    title: 'Log in',
+    loadComponent: () => import('./features/auth/pages/login/login').then((m) => m.Login),
   },
   {
-    path: 'users/new',
-    title: 'New user',
-    loadComponent: () => import('./features/users/pages/user-form/user-form').then((m) => m.UserForm),
-  },
-  {
-    path: 'users/:id/edit',
-    title: 'Edit user',
+    path: 'register',
+    title: 'Create account',
     loadComponent: () => import('./features/users/pages/user-form/user-form').then((m) => m.UserForm),
   },
 
@@ -24,6 +19,11 @@ export const routes: Routes = [
     path: '',
     canActivate: [currentUserGuard],
     children: [
+      {
+        path: 'dashboard',
+        title: 'Dashboard',
+        loadComponent: () => import('./features/dashboard/pages/dashboard/dashboard').then((m) => m.Dashboard),
+      },
       {
         path: 'deposits',
         title: 'Deposits',
@@ -68,6 +68,11 @@ export const routes: Routes = [
         path: 'dreams/:id/edit',
         title: 'Edit dream',
         loadComponent: () => import('./features/dreams/pages/dream-form/dream-form').then((m) => m.DreamForm),
+      },
+      {
+        path: 'users/:id/edit',
+        title: 'Edit profile',
+        loadComponent: () => import('./features/users/pages/user-form/user-form').then((m) => m.UserForm),
       },
     ],
   },

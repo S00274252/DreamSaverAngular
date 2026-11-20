@@ -11,6 +11,8 @@ import { CurrentUserService } from '../../../../core/current-user.service';
 import { notBlank } from '../../../../shared/validators/not-blank.validator';
 import { CreateUserDto, UpdateUserDto } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
+import { switchMap } from 'rxjs';
+import { AuthService } from '../../../../core/auth.service';
 
 @Component({
   selector: 'app-user-form',
@@ -31,6 +33,7 @@ export class UserForm implements OnInit {
   private readonly snackBar = inject(MatSnackBar);
   private readonly userService = inject(UserService);
   private readonly currentUser = inject(CurrentUserService);
+  private readonly auth = inject(AuthService);
 
   readonly id = input<string>();
 
@@ -80,22 +83,22 @@ export class UserForm implements OnInit {
             this.currentUser.select(user);
           }
           this.snackBar.open(`${user.name} saved`, 'Close', { duration: 5000 });
-          this.router.navigate(['/users']);
+          this.router.navigate(['/dashboard']);
         },
         error: (err: Error) => this.failSave(err),
       });
     } else {
       const newUser: CreateUserDto = { name: name.trim(), email: email.trim(), password };
-      this.userService.addUser(newUser).subscribe({
-        next: (user) => {
-          if (!this.currentUser.userId()) {
-            this.currentUser.select(user);
-          }
-          this.snackBar.open(`${user.name} created`, 'Close', { duration: 5000 });
-          this.router.navigate(['/users']);
-        },
-        error: (err: Error) => this.failSave(err),
-      });
+      this.auth
+        .register(newUser)
+        .pipe(switchMap(() => this.auth.login(newUser.email, newUser.password)))
+        .subscribe({
+          next: (user) => {
+            this.snackBar.open(`Welcome, ${user.name}`, 'Close', { duration: 5000 });
+            this.router.navigate(['/dashboard']);
+          },
+          error: (err: Error) => this.failSave(err),
+        });
     }
   }
 

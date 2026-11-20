@@ -9,16 +9,8 @@ export class UserService {
   private http = inject(HttpClient);
   private apiUrl = `${API_URL}/users`;
 
-  getUsers(): Observable<User[]> {
-    return this.http.get<User[]>(this.apiUrl);
-  }
-
   getUserById(id: string): Observable<User> {
     return this.http.get<User>(`${this.apiUrl}/${id}`);
-  }
-
-  addUser(user: CreateUserDto): Observable<User> {
-    return this.http.post<User>(this.apiUrl, user);
   }
 
   updateUser(id: string, changes: UpdateUserDto): Observable<User> {

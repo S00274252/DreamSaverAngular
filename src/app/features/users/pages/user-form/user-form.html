@@ -3,7 +3,7 @@
     <mat-progress-bar mode="indeterminate" />
   }
 
-  <h2>{{ id() ? 'Edit user' : 'New user' }}</h2>
+  <h2>{{ id() ? 'Edit profile' : 'Create account' }}</h2>
 
   <mat-form-field appearance="outline">
     <mat-label>Name</mat-label>
@@ -48,8 +48,8 @@
 
   <div class="button-group">
     <button matButton="filled" type="submit" [disabled]="saving()">
-      {{ saving() ? 'Saving...' : 'Save user' }}
+      {{ saving() ? 'Saving...' : id() ? 'Save profile' : 'Register' }}
     </button>
-    <a matButton routerLink="/users">Cancel</a>
+    <a matButton [routerLink]="id() ? '/dashboard' : '/login'">Cancel</a>
   </div>
 </form>

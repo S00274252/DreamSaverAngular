@@ -8,7 +8,9 @@ export function friendlyMessage(error: HttpErrorResponse): string {
     case 400:
       return 'Some of the data was not valid.';
     case 401:
-      return 'Please log in to continue.';
+      return error.url?.endsWith('/auth/login')
+        ? 'Invalid email or password.'
+        : 'Your session has expired. Please log in again.';
     case 403:
       return 'You are not allowed to do that.';
     case 404:

@@ -3,6 +3,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { CurrentUserService } from './core/current-user.service';
+import { AuthService } from './core/auth.service';
 
 @Component({
   selector: 'app-root',
@@ -12,4 +13,5 @@ import { CurrentUserService } from './core/current-user.service';
 })
 export class App {
   protected readonly currentUser = inject(CurrentUserService);
+  protected readonly auth = inject(AuthService);
 }
